@@ -1,3 +1,12 @@
+From 2b3e5e7c21eabcfa92588ece39c1ad99d3884cdc Mon Sep 17 00:00:00 2001
+From: David-Michael Buckman <dmbuck32@gmail.com>
+Date: Fri, 21 Apr 2023 13:22:08 +1200
+Subject: [PATCH] Remove kernel version check.
+
+---
+ src/compat/compat.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
 diff --git a/src/compat/compat.h b/src/compat/compat.h
 index 69dada8..9091b2e 100644
 --- a/src/compat/compat.h
@@ -15,3 +24,5 @@ index 69dada8..9091b2e 100644
  
  #if defined(ISRHEL7)
  #include <linux/skbuff.h>
+-- 
+2.34.1

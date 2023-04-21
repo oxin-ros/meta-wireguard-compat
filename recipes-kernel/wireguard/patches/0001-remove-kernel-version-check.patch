@@ -1,7 +1,7 @@
-Index: git/src/compat/compat.h
+Index: src/compat/compat.h
 ===================================================================
---- git.orig/src/compat/compat.h
-+++ git/src/compat/compat.h
+--- a/src/compat/compat.h
++++ b/src/compat/compat.h
 @@ -34,9 +34,9 @@
  #error "WireGuard requires Linux >= 3.10"
  #endif

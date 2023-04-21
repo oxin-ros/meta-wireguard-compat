@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}/patches:"
+FILESEXTRAPATHS_prepend := "${THISDIR}/patches:"
 
 # do_compile[depends] += "virtual/kernel:do_shared_workdir"
 

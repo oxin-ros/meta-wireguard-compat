@@ -1,10 +1,34 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}/patches:"
+# This is from:
+# https://github.com/miraclelinux/meta-emlinux/commit/edb9ef70c43012aa3afa08d19604aa000b816737
 
-# TODO: is this necessary?
-# do_compile[depends] += "virtual/kernel:do_shared_workdir"
+do_install_prepend() {
+    cd ${S}
+    if [ "${@bb.utils.vercmp_string_op(d.getVar("KERNEL_VERSION"), '5.10', '>=')}" = "True" ]; then
+        touch arch/arm64/kernel/vdso/gettimeofday.S
+        touch arch/arm64/kernel/module.lds
+    fi
+}
 
-# SRC_URI += "file://0001-fix-module.lds-not-exist.patch;patchdir=${WORKDIR}/git"
-SRC_URI += "file://0001-fix-module.lds-not-exist.patch"
+do_install_append() {
+    if [ "${@bb.utils.vercmp_string_op(d.getVar("KERNEL_VERSION"), '5.10', '>=')}" = "True" ]; then
+        cd ${S}
+        if [ "${ARCH}" = "arm64" ]; then
+            install -D arch/arm64/kernel/vdso/*gettimeofday.* \
+                $kerneldir/build/arch/arm64/kernel/vdso/
+        fi
+        install -D lib/vdso/gettimeofday.* $kerneldir/build/lib/vdso/
+        install -D Kbuild $kerneldir/build/
+        install -D Kconfig $kerneldir/build/
+        install -D kernel/bounds.c $kerneldir/build/kernel/
+        install -D kernel/time/timeconst.bc $kerneldir/build/kernel/time/
+        install -D arch/arm64/kernel/asm-offsets.c $kerneldir/build/arch/arm64/kernel/
 
-LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://${COREBASE}/meta/files/common-licenses/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
+        cd ${B}
+        install -D scripts/module.lds $kerneldir/build/scripts/
+    else
+        cd ${S}
+        install -D kernel/bounds.c $kerneldir/build/kernel/
+        install -D kernel/time/timeconst.bc $kerneldir/build/kernel/time/
+        install -D arch/arm64/kernel/asm-offsets.c $kerneldir/build/arch/arm64/kernel/
+    fi
+}
